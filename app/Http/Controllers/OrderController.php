@@ -6,6 +6,8 @@ use App\Http\Requests\StoreOrderRequest;
 use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
 
+use Exception;
+
 class OrderController extends Controller
 {
     protected $orderService;
@@ -18,35 +20,51 @@ class OrderController extends Controller
     // GET /api/orders
     public function index(): JsonResponse
     {
-        $orders = $this->orderService->listOrders();
-        return response()->json($orders);
+        try {
+            $orders = $this->orderService->listOrders();
+            return $this->success($orders);
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage(), 500);
+        }
     }
 
     // POST /api/orders
     public function store(StoreOrderRequest $request): JsonResponse
     {
-        $order = $this->orderService->createOrder($request->validated());
-        return response()->json($order, 201);
+        try {
+            $order = $this->orderService->createOrder($request->validated());
+            return $this->success($order, 201);
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage(), 500);
+        }
     }
 
     // GET /api/orders/{id}
     public function show(int $id): JsonResponse
     {
-        $order = $this->orderService->getOrderDetail($id);
-        if (!$order) return response()->json(['message' => 'Order not found'], 404);
+        try {
+            $order = $this->orderService->getOrderDetail($id);
+            if (!$order) return $this->error('Order not found', 404);
 
-        return response()->json($order);
+            return $this->success($order);
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage(), 500);
+        }
     }
 
     // POST /api/orders/{id}/advance
     public function advance(int $id): JsonResponse
     {
-        $order = $this->orderService->advanceOrder($id);
+        try {
+            $order = $this->orderService->advanceOrder($id);
 
-        if (!$order) {
-            return response()->json(['message' => 'Order delivered and removed'], 200);
+            if (!$order) {
+                return $this->success('Order delivered and removed');
+            }
+
+            return $this->success($order);
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage(), 500);
         }
-
-        return response()->json($order);
     }
 }
