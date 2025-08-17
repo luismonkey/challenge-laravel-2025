@@ -15,4 +15,12 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    /**
+     * Relación con historial de estados
+     */
+    public function statusLogs(): HasMany
+    {
+        return $this->hasMany(OrderStatusLog::class);
+    }
 }

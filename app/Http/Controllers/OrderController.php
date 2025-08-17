@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreOrderRequest;
 use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
-use OpenApi\Annotations as OA;
+use App\Jobs\LogOrderStatusChange;
 
 use Exception;
 
@@ -62,6 +62,14 @@ class OrderController extends Controller
             if (!$order) {
                 return $this->success('Order delivered and removed');
             }
+
+            $oldStatus = match($order->status) {
+                'sent' => 'initiated',
+                'delivered' => 'sent', // aunque en la práctica no llegaría aquí
+                default => null
+            };
+
+            LogOrderStatusChange::dispatch($order->id, $oldStatus, $order->status);
 
             return $this->success($order);
         } catch (\Exception $e) {
