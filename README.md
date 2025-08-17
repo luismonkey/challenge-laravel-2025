@@ -50,22 +50,24 @@ cp .env.example .env
 
 Ejemplo de configuración para Docker:
 
-APP_NAME=RestaurantOrders
-APP_ENV=local
-APP_KEY=
-APP_DEBUG=true
-APP_URL=http://localhost
+## Environment Variables
 
-DB_CONNECTION=pgsql
-DB_HOST=postgres
-DB_PORT=5432
-DB_DATABASE=restaurant
-DB_USERNAME=postgres
-DB_PASSWORD=12345
+`APP_NAME`=RestaurantOrders
+`APP_ENV`=local
+`APP_KEY`=
+`APP_DEBUG`=true
+`APP_URL`=http://localhost
 
-REDIS_HOST=redis
-REDIS_PASSWORD=null
-REDIS_PORT=6379
+`DB_CONNECTION`=pgsql
+`DB_HOST`=postgres
+`DB_PORT`=5432
+`DB_DATABAS`E=restaurant
+`DB_USERNAME`=postgres
+`DB_PASSWORD`=12345
+
+`REDIS_HOST`=redis
+`REDIS_PASSWORD`=null
+`REDIS_PORT`=6379
 
 **Importante**: Los hosts postgres y redis corresponden a los nombres de los servicios definidos en docker/docker-compose.yml.
 
@@ -82,8 +84,29 @@ composer install
 php artisan migrate
 ```
 
-Probar la API 🧪
+## Probar la API 🧪
 
 Los endpoints están disponibles a través de Nginx en:
 
+```bash
 http://localhost:8000/api/
+```
+
+## Endpoints principales
+
+| Método | Endpoint                 | Descripción                          |
+| ------ | ------------------------ | ------------------------------------ |
+| GET    | /api/orders              | Lista todas las órdenes activas      |
+| POST   | /api/orders/store        | Crea una nueva orden                 |
+| POST   | /api/orders/{id}/advance | Avanza el estado de la orden         |
+| GET    | /api/orders/{id}         | Muestra detalle completo de la orden |
+
+## Notas importantes ⚡
+
+ - Redis se usa para cache y queues.
+
+ - Los cambios de estado de las órdenes se registran usando queues para no bloquear la aplicación.
+
+ - Swagger/Postman disponible para documentación de la API.
+
+ - Todos los servicios están en la red Docker laravel, lo que permite que PHP se conecte a Postgres y Redis usando los nombres de servicio.
