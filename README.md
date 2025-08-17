@@ -1,58 +1,19 @@
-# 🧪 OlaClick Backend Challenge - Laravel Edition
+# Restaurant Orders API 🍽️
 
-## 🎯 Objetivo
-
-Construir una API RESTful para la gestión de órdenes de un restaurante, implementada en **Laravel**, siguiendo principios **SOLID**, usando **Eloquent ORM**, **PostgreSQL** como base de datos y **Redis** para caché. La solución debe estar **contenedorizada con Docker**.
+API RESTful para la gestión de órdenes de un restaurante, implementada en **Laravel**, usando **PostgreSQL**, **Redis** y contenedores **Docker**.
 
 ---
 
-## 📌 Requerimientos Funcionales
+## Requisitos 🛠️
 
-### 1. Listar órdenes
-- Endpoint: `GET /api/orders`
-- Retorna todas las órdenes activas (`status != 'delivered'`).
-- Debe usar Redis para cachear el resultado (TTL: 30s).
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- Docker Compose
+- Composer (opcional, solo si quieres instalar dependencias fuera del contenedor)
 
-### 2. Crear una nueva orden
-- Endpoint: `POST /api/orders`
-- Crea una nueva orden con estado inicial `initiated`.
-- Estructura esperada:
-  ```json
-  {
-    "client_name": "Carlos Gómez",
-    "items": [
-      { "description": "Lomo saltado", "quantity": 1, "unit_price": 60 },
-      { "description": "Inka Kola", "quantity": 2, "unit_price": 10 }
-    ]
-  }
+---
 
-### 3. Avanzar estado de una orden
-Endpoint: `POST /api/orders/{id}/advance`
+## Estructura del proyecto 📂
 
-Transición:
-
-initiated → sent → delivered
-
-Si llega a delivered, la orden debe ser eliminada de la base de datos y del caché.
-
-### 4. Ver detalle de una orden
-Endpoint: `GET /api/orders/{id}`
-
-Muestra datos completos incluyendo items, totales y estado actual.
-
-## 🧱 Consideraciones Técnicas
-- Usar Laravel 10+
-- Base de datos: PostgreSQL
-- Cache: Redis
-- Arquitectura REST
-- Principios SOLID aplicados (ej. inyección de dependencias, separación de responsabilidades)
-- Modelado con Eloquent ORM
-- Validaciones robustas con Form Requests
-- Tests unitarios o de feature (al menos 1 funcionalidad)
-- Contenerización con Docker + Docker Compose
-
-## 📦 Estructura sugerida
-```
 app/
 ├── Http/
 │   ├── Controllers/
@@ -60,24 +21,73 @@ app/
 ├── Models/
 ├── Services/
 ├── Repositories/
+├─ docker/
+│ ├─ php/Dockerfile
+│ └─ nginx/default.conf
+├─ docker/docker-compose.yml
 routes/
 ├── api.php
-```
 
-## 🧪 Extra Points
-- Documentación en Swagger o Postman
-- Seeders y factories para testeo rápido
-- Logs de cambios de estado con timestamps
+---
 
-## 🚀 Cómo entregar
-- Haz un fork de este repositorio o clónalo como plantilla.
-- Implementa la solución.
-- Incluye instrucciones claras en un README.md para levantar el proyecto con Docker.
-- Comparte el repositorio (público o privado) con el equipo de OlaClick enviando un push.
+## Levantar el proyecto con Docker 🚀
 
-## ❓ Preguntas opcionales para explicar
-- ¿Cómo asegurarías que esta API escale ante alta concurrencia?
-- ¿Qué estrategia seguirías para desacoplar la lógica del dominio de Laravel/Eloquent?
-- ¿Cómo manejarías versiones de la API en producción?
+1️⃣ Clona el repositorio y entra al proyecto:
 
-**¡Mucho éxito!** 💡
+```bash
+git clone <URL_DEL_REPO>
+cd challenge-laravel-2025
+
+2️⃣ Levanta los contenedores desde la carpeta docker/:
+
+docker compose -f docker/docker-compose.yml up -d --build
+
+Esto creará los contenedores: laravel_php, laravel_nginx, laravel_postgres y laravel_redis.
+
+3️⃣ Ingresa al contenedor PHP:
+
+docker exec -it laravel_php bash
+
+4️⃣ Ve a la carpeta del proyecto dentro del contenedor:
+
+cd /var/www
+
+5️⃣ Copia el .env y configura la base de datos y Redis:
+
+cp .env.example .env
+
+Ejemplo de configuración para Docker:
+
+APP_NAME=RestaurantOrders
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost
+
+DB_CONNECTION=pgsql
+DB_HOST=postgres
+DB_PORT=5432
+DB_DATABASE=restaurant
+DB_USERNAME=postgres
+DB_PASSWORD=12345
+
+REDIS_HOST=redis
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+**Importante**: Los hosts postgres y redis corresponden a los nombres de los servicios definidos en docker/docker-compose.yml.
+
+6️⃣ Genera la key de Laravel:
+
+php artisan key:generate
+
+7️⃣ Instala las dependencias y ejecuta migraciones:
+
+composer install
+php artisan migrate
+
+Probar la API 🧪
+
+Los endpoints están disponibles a través de Nginx en:
+
+http://localhost:8000/api/
