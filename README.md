@@ -12,24 +12,6 @@ API RESTful para la gestión de órdenes de un restaurante, implementada en **La
 
 ---
 
-## Estructura del proyecto 📂
-
-app/
-├── Http/
-│   ├── Controllers/
-│   ├── Requests/
-├── Models/
-├── Services/
-├── Repositories/
-├─ docker/
-│ ├─ php/Dockerfile
-│ └─ nginx/default.conf
-├─ docker/docker-compose.yml
-routes/
-├── api.php
-
----
-
 ## Levantar el proyecto con Docker 🚀
 
 1️⃣ Clona el repositorio y entra al proyecto:
@@ -37,24 +19,34 @@ routes/
 ```bash
 git clone <URL_DEL_REPO>
 cd challenge-laravel-2025
+```
 
 2️⃣ Levanta los contenedores desde la carpeta docker/:
 
+
+```bash
 docker compose -f docker/docker-compose.yml up -d --build
+```
 
 Esto creará los contenedores: laravel_php, laravel_nginx, laravel_postgres y laravel_redis.
 
 3️⃣ Ingresa al contenedor PHP:
 
+```bash
 docker exec -it laravel_php bash
+```
 
 4️⃣ Ve a la carpeta del proyecto dentro del contenedor:
 
+```bash
 cd /var/www
+```
 
 5️⃣ Copia el .env y configura la base de datos y Redis:
 
+```bash
 cp .env.example .env
+```
 
 Ejemplo de configuración para Docker:
 
@@ -79,12 +71,16 @@ REDIS_PORT=6379
 
 6️⃣ Genera la key de Laravel:
 
+```bash
 php artisan key:generate
+```
 
 7️⃣ Instala las dependencias y ejecuta migraciones:
 
+```bash
 composer install
 php artisan migrate
+```
 
 Probar la API 🧪
 
