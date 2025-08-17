@@ -107,6 +107,6 @@ http://localhost:8000/api/
 
  - Los cambios de estado de las órdenes se registran usando queues para no bloquear la aplicación.
 
- - Swagger/Postman disponible para documentación de la API.
+ - [Swagger](http://localhost:8000/api/documentation) disponible para documentación de la API.
 
  - Todos los servicios están en la red Docker laravel, lo que permite que PHP se conecte a Postgres y Redis usando los nombres de servicio.
