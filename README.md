@@ -97,7 +97,7 @@ http://localhost:8000/api/
 | Método | Endpoint                 | Descripción                          |
 | ------ | ------------------------ | ------------------------------------ |
 | GET    | /api/orders              | Lista todas las órdenes activas      |
-| POST   | /api/orders/store        | Crea una nueva orden                 |
+| POST   | /api/orders              | Crea una nueva orden                 |
 | POST   | /api/orders/{id}/advance | Avanza el estado de la orden         |
 | GET    | /api/orders/{id}         | Muestra detalle completo de la orden |
 

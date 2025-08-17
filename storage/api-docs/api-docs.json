@@ -1,15 +1,146 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Mi API - Documentación",
-        "description": "Documentación de la API de mi proyecto",
+        "title": "API - Documentación",
+        "description": "Documentación de la API Challenge Laravel 2025",
         "contact": {
-            "email": "soporte@midominio.com"
+            "email": "gluis8505@gmail.com"
         },
         "version": "1.0.0"
     },
     "paths": {
         "/api/orders": {
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Crear orden",
+                "operationId": "OrderController@store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "client_name"
+                                ],
+                                "properties": {
+                                    "client_name": {
+                                        "description": "Nombre del cliente",
+                                        "type": "string",
+                                        "example": "Luis Gómez"
+                                    },
+                                    "items": {
+                                        "description": "Array detalles",
+                                        "type": "array",
+                                        "example": [
+                                            {
+                                                "description": "Lomo saltado", "quantity": 1, "unit_price": 60
+                                            }
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Detalles de una orden",
+                        "content": {
+                            "application/json": {
+                                 "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                        "type": "numeric",
+                                                        "example": 1
+                                                },
+                                                "client_name": {
+                                                    "type": "string",
+                                                    "example": "Luis Gómez"
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "initiated"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "example": "2023-06-09T02:14:27.000000Z"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "example": "2023-06-09T02:14:27.000000Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "ok": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "numeric",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string",
+                                            "example": "Order not found"
+                                        },
+                                        "ok": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "numeric",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "string",
+                                            "example": "Exception message"
+                                        },
+                                        "ok": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "numeric",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "get": {
                 "tags": [
                     "Orders"
@@ -293,139 +424,6 @@
                 "responses": {
                     "200": {
                         "description": "Detalles de una orden o mensaje: Order delivered and removed",
-                        "content": {
-                            "application/json": {
-                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "id": {
-                                                        "type": "numeric",
-                                                        "example": 1
-                                                },
-                                                "client_name": {
-                                                    "type": "string",
-                                                    "example": "Luis Gómez"
-                                                },
-                                                "status": {
-                                                    "type": "string",
-                                                    "example": "initiated"
-                                                },
-                                                "updated_at": {
-                                                    "type": "string",
-                                                    "example": "2023-06-09T02:14:27.000000Z"
-                                                },
-                                                "created_at": {
-                                                    "type": "string",
-                                                    "example": "2023-06-09T02:14:27.000000Z"
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "ok": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "code": {
-                                            "type": "numeric",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Error: Not Found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "type": "string",
-                                            "example": "Order not found"
-                                        },
-                                        "ok": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "code": {
-                                            "type": "numeric",
-                                            "example": 404
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "type": "string",
-                                            "example": "Exception message"
-                                        },
-                                        "ok": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "code": {
-                                            "type": "numeric",
-                                            "example": 500
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/orders/store": {
-            "post": {
-                "tags": [
-                    "Orders"
-                ],
-                "summary": "Crear orden",
-                "operationId": "OrderController@store",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "client_name"
-                                ],
-                                "properties": {
-                                    "client_name": {
-                                        "description": "Nombre del cliente",
-                                        "type": "string",
-                                        "example": "Luis Gómez"
-                                    },
-                                    "items": {
-                                        "description": "Array detalles",
-                                        "type": "array",
-                                        "example": [
-                                            {
-                                                "description": "Lomo saltado", "quantity": 1, "unit_price": 60
-                                            }
-                                        ]
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Detalles de una orden",
                         "content": {
                             "application/json": {
                                  "schema": {
