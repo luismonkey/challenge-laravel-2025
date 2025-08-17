@@ -4,9 +4,12 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Validation\ValidationException;
+use App\Traits\ApiResponse;
 
 class Handler extends ExceptionHandler
 {
+    use ApiResponse;
     /**
      * The list of the inputs that are never flashed to the session on validation exceptions.
      *
@@ -26,5 +29,11 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    protected function convertValidationExceptionToResponse(ValidationException $e, $request)
+    {
+        $errors = $e->validator->errors()->getMessages();
+        return $this->error($errors, 422);
     }
 }
